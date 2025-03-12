@@ -1,81 +1,3 @@
-# Large Scale Data Processing: Project 1
-## Understanding Git
-If you're unfamiliar with version control systems, especially Git, please consult the [Git Handbook](https://guides.github.com/introduction/git-handbook/) and some of the additional resources it provides.
-
-## Setting up your local environment
-1.	[Install JDK](https://www.oracle.com/java/technologies/javase-jdk15-downloads.html)  
-  a.	Be sure to check that the environment variables are set properly.
-
-2.	[Install Spark](https://spark.apache.org/downloads.html)  
-  a.	Select version 3.5.4 with Hadoop 3.3.  
-  b.	After the installation, you may need to set the environment variables properly.  
-  c.	To test whether or not everything runs, open a terminal and type `spark-shell`. Now that you are in the Scala interpreter, you can execute Scala code here. For example, you can try `println(“Hello World!”)`. You can exit the shell by typing `:q`.  
-  d.	Tip: In the Spark shell, you can test segments of Scala codes before you write them in the file. It's a very convenient way to learn Scala and Spark.   
-  
-3.	[Install SBT](https://www.scala-sbt.org/download.html)  
-  a.	SBT is a builder for Scala programs.  
-  b.	Check that the environment variables are set properly.
-
-## Additional Notes of Installation on Windows Machines:
-
-1. Create the SPARK_HOME and HADOOP_HOME environment variables and set their values to the address of the folder with the other components of Spark in it (i.e. this folder should have the bin, conf, and data folders, among others).
-2. JAVA_HOME needs to be set to the jre folder of the Java version you downloaded. It is usually found in C:/Program Files/Java.
-3. PATH needs to be updated to include the address of the bin folder of the Spark install (i.e., the bin folder in the folder from step 2).
-4. For Windows machines, you also need to download hadoop.dll and winutils.exe. Do so from this GitHub directory: https://github.com/kontext-tech/winutils/tree/master/hadoop-3.3.0/bin
-5. Move hadoop.dll and winutils.exe into the bin folder of the Spark install.
-6. For some reason, Windows machines seem to require the installing terminal work to be done in Command Prompt, instead of a VM or in Git Bash. If you are encountering difficulties, try doing all the installation work in Command Prompt. For both Windows and Mac, after installing SBT, you also need to update PATH to include the sbt folder. It is usually found in Program Files (x86).
-  
-## Cloning the project_1 repository
-This is a template repository. You can duplicate the repository, renaming it and adjusting your own settings, but cannot directly clone it and push to its **origin/main** branch. Create your own repository by selecting the green **Use this template** button. You'll be submitting the link to the respository you created (more on that later). Once you have your own repository, you can clone it to your local machine.
-
-## Validating your environment
-Let's build and execute **project_1**.  
-1. Navigate to the project root and type `sbt clean package` to build the project's **.jar** file.  
-2. Run the following command:
-```
-// Linux
-spark-submit --class project_1.main --master local[*] target/scala-2.12/project_1_2.12-1.0.jar
-
-// Unix
-spark-submit --class "project_1.main" --master "local[*]" target/scala-2.12/project_1_2.12-1.0.jar
-```
-3. Upon successful execution, you should see the message below. Note that `string`, `difficulty`, and `#trials` are the arguments you'll be passing in.
-```
-Usage: project_1 string difficulty #trials
-```
-
-## Setting up GCP
-1. Sign up for an account **with your BC email** on [Google Cloud Platform](https://cloud.google.com).  
-2. Apply [here](https://gcp.secure.force.com/GCPEDU?cid=YSIHxnnNFF6I4CVwRJIdonhnb8o%2F%2B%2FK4RiNpPT%2BSy8Tp7BU82x7TxOe%2B1yP5rHzS/) for the course's pre-approved credits. GCP will request that you verify your email address first.  
-3. Once you verify your email address, you'll receive an email allowing you to redeem your credits. It links to a page where you can redeem using the coupon code GCP provides you.  
-4. You should now have $50 in credit. You can verify this by doing the following:  
-  a. Open the navigation menu in the top left corner.  
-  b. Navigate to **Billing**.  
-  c. Select **bc.edu** as your organization and open the **Billing Account for Education** account.  
-  d. On the overview page for this billing account, there's a **Promotional credits** box towards the bottom right of the page. The balance should be $50.  
-5. Use your credits judiciously. Creating large clusters, using complex features like Jupyter Notebook, or forgetting to terminate clusters after use are some activities that quickly consume credits. While you have $50 in credit, you shouldn't expect to use more than $20 for the course.  
-
-## Creating a GCP project
-1. Select the **bc.edu** organization name in the top bar and then the **New Project** button in the top right corner of that menu.  
-2. For the project name, we recommend that you follow the `bcusername-csci3390-project` convention, e.g. `smith-csci3390-project1`.  
-3. Leave **bc.edu** as the organization and choose **bc.edu/Learning/Student** (which you can access through **Browse**) as the location.  
-4. Creating the project should bring you to the project overview page. In the search bar at the top, search for "dataproc" and select the **Dataproc** product.  
-5. Enable the Cloud Dataproc API.  
-6. Select the **Create Cluster** button and configure your cluster the following way:  
-  a. Cluster name `bcusername-csci3390-cluster`, e.g. `smith-csci3390-cluster`.  
-  b. Version image 2.2 with Debian or Ubuntu (it will look like `2.2-debian12`).  
-  c. In the `Customize cluster` page, check the box in the `Scheduled deletion` section that says "Delete after a cluster idle time period without submitted jobs" and specify a 2 hour timeout. This will terminate the cluster in case you forget to manually.  
-7. To execute the project's **.jar** file, you'll need to upload it somewhere accessible to the cluster. This can be accomplished by creating a [GCP storage bucket](https://console.cloud.google.com/storage). Name it `bcusername-csci3390-bucket`, e.g. `smith-csci3390-bucket`. Leave the rest of the settings on their default.  
-8. Upload the **.jar** file located in **target/scala-2.12** in your project directory.  
-9. Back in the **Dataproc** console, select the **Submit Job** button on the **Jobs** page.  
-10. Submit a job with the following configuration:  
-  a. Select the cluster you created for **Cluster**.  
-  b. `Spark` job type.  
-  c. `project_1.main` for the main class.  
-  d. `gs://your-bucket-name/project_1_2.12-1.0.jar` for the **.jar** file.  
-  e. A value of 1 for maximum restarts per hour.  
-11. Upon successful execution, you should see `Usage: project_1 string difficulty #trials` as the job output. Cheers to successfully configuring your cloud environment.
-
 ## Bitcoin mining with Spark
 The key to mining Bitcoin is to solve a puzzle involving the SHA-256 hash function, where SHA stands for "security hash algorithm" and 256 denotes the output of the hash function as having 256 bits (or, equivalently, a 64-digit hexadecimal number). Given a Bitcoin header string `S`, the puzzle is to find a positive integer `x` (called "nonce") such that the concatenation `xS` is hashed to a hexadecimal number with `k` leading zeros. The parameter `k` is known as the difficulty of the puzzle. The actual Bitcoin difficulty is currently 11. [Here](https://emn178.github.io/online-tools/sha256.html) is a working exhibit of an SHA-256 calculator.  
 
@@ -122,3 +44,67 @@ Delete your project's current **README.md** file (the one you're reading right n
 
 ## Late Submission Penalties
 Please refer to the course policy.
+
+
+# Group Project 1 - Bitcoin Mining with Spark
+## Group 7
+## Member: Hoiting Mok, Ruolong Mao
+
+### Q1: Run the program on your local machine to solve cases k = 2,3,4,5,6. For each k, provide xS, its hash value, the total time elapsed, and the number of trials.
+
+**Hash String Used:** `this_is_a_bitcoin_block_of_35641890_and_45459077`
+
+| k  | xS | Hash Value | Time Elapsed | Number of Trials |
+|----|-----------------------------------------------|------------------------------------------------------------------|--------------|----------------|
+| 2  | 1584511766this_is_a_bitcoin_block_of_35641890_and_45459077 | 006e73d833eaef0adaa6e0d0a094376c4fdf519e4d96b0aed3daf697464c40da | 2s | 100 |
+| 3  | 335471923this_is_a_bitcoin_block_of_35641890_and_45459077  | 000811dc0226bde01964623f22f37b2c391e8910e046ecf73dc8af6c0b93fa74 | 2s | 600 |
+| 4  | 988540602this_is_a_bitcoin_block_of_35641890_and_45459077  | 0000303fd42f3a8ddfa253b3b7e62a19861c791cc7190da07238e31f7cbb8ff2 | 2s | 65,536 |
+| 5  | 1016176955this_is_a_bitcoin_block_of_35641890_and_45459077 | 00000b8c5bc0e2a71c7d226d34cb890cdb71542ec9a3127a256736e14f4272e3 | 2s | 400,000 |
+| 6  | 1231536268this_is_a_bitcoin_block_of_35641890_and_45459077 |  000000c21d5c0f18bc90fa434a7ae396dcb26df6b47c910b7e13cafe08c245d2 | 5s | 4,000,000 |
+
+#### Commentary
+Toward the earlier, smaller values of k, we were able to solve the cases using the example command (k=2, n=100) and gradually incrementing the number of trials in multiples of 100 (k=3, n=600). Every case with their corresponding number of trials are tested on our two machines with at least three times of success respectively. However, starting from k=4, the required number of trials increased significantly. Finally, for k=6, we used 4,000,000 trials and observed an increase in computation time. This is because the difficulty of finding a qualified hashed number from the SHA-256 hash family increases exponentially as k goes larger.
+
+---
+
+### Q2:
+
+**Cluster Configuration:**
+- Number of machines: **2**
+- Machine type: **n2-standard-4**
+
+**Results for k=7:**
+- **xS:** `679105772this_is_a_bitcoin_block_of_45459077_and_35641890`
+- **Hash Value:** `00000003dfd79803a7b5d6ea1174db10b8e2b89ef402dc316d3e2dab5d19d05f`
+- **Time Elapsed:** **803s**
+- **Number of Trials:** **268,435,456 (2^28)**
+
+#### Commentary
+To estimate the required number of trials for k=7, we explored on the nature of SHA-256 hashing. 
+Each hexadecimal digit in an SHA-256 hash represents 4 bits and has a \( \frac{1}{16} \) probability of being zero. Since the first \( k \) hex digits must all be zero, the probability of this occurring is:
+
+\[
+\left(\frac{1}{16}\right)^k = \frac{1}{2^{4k}}
+\]
+
+This means that, on average, \( 2^{4k} \) trials are required to find a valid nonce.
+The GCP cluster allowed us to handle this computation efficiently within **803 seconds**.
+
+---
+
+### Q3: Code Modification and Efficiency Analysis
+
+**Original:**
+```scala
+val nonce = sc.range(0, trials).mapPartitionsWithIndex((indx, iter) => {
+  val rand = new scala.util.Random(indx + seed)
+  iter.map(x => rand.nextInt(Int.MaxValue - 1) + 1)
+})
+```
+
+**Modified:**
+```scala
+val nonce = sc.range(1, trials)
+  //val rand = new scala.util.Random(indx + seed)
+  //iter.map(x => rand.nextInt(Int.MaxValue - 1) + 1)
+```
