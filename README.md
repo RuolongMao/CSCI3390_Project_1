@@ -58,5 +58,5 @@ val nonce = sc.range(1, trials)
   //val rand = new scala.util.Random(indx + seed)
   //iter.map(x => rand.nextInt(Int.MaxValue - 1) + 1)
 ```
-
-I don't think it would be more efficient. In the original version, each partition initializes its own random number generator and produces nonces in a randomnized manner. In the modified version, we iterate through a sequential range of number that covers tha nonces in order. Since the hash function is randomnized, nonces should be tested in a way that also follows randomnization. Brute force searching for the solution should be randomnized for it to make sense. Also, by randomnizing, work is distributed more evenly across parallel workers. The sequential approach might lead to inefficient partitioning. Therefore, the modified approach would not be more efficient than the randomnized approach.
+#### Commentary
+We don't think it would be more efficient. In the original version, each partition initializes its own random number generator and produces nonces in a randomnized manner. In the modified version, we iterate through a sequential range of number that covers tha nonces in order. Since the hash function is randomnized, nonces should be tested in a way that also follows randomnization. Brute force searching for the solution should be randomnized for it to make sense. Also, by randomnizing, work is distributed more evenly across parallel workers. The sequential approach might lead to inefficient partitioning. Therefore, the modified approach would not be more efficient than the randomnized approach.
